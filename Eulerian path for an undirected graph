@@ -1,0 +1,93 @@
+#include <iostream>
+#include <vector>
+#include <stack>
+
+class Graph {
+    int vertices;
+    std::vector<std::vector<int>> adjacencyList;
+
+public:
+    Graph(int V) : vertices(V) {
+        adjacencyList.resize(V);
+    }
+
+    void addEdge(int u, int v) {
+        adjacencyList[u].push_back(v);
+        adjacencyList[v].push_back(u); // Undirected graph
+    }
+
+    bool isEulerianCycle() {
+        for (int v = 0; v < vertices; v++) {
+            if (adjacencyList[v].size() % 2 != 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    bool isSemiEulerianGraph() {
+        int oddDegreeCount = 0;
+        for (int v = 0; v < vertices; v++) {
+            if (adjacencyList[v].size() % 2 != 0) {
+                oddDegreeCount++;
+            }
+        }
+        return (oddDegreeCount == 0 || oddDegreeCount == 2);
+    }
+
+    void DFS(int v, std::vector<bool>& visited) {
+        std::stack<int> stack;
+        stack.push(v);
+
+        while (!stack.empty()) {
+            v = stack.top();
+            stack.pop();
+
+            if (!visited[v]) {
+                visited[v] = true;
+                std::cout << v << " ";
+
+                for (int neighbor : adjacencyList[v]) {
+                    if (!visited[neighbor]) {
+                        stack.push(neighbor);
+                    }
+                }
+            }
+        }
+    }
+
+    void findEulerianPath() {
+        if (isEulerianCycle() || isSemiEulerianGraph()) {
+            int startVertex = 0; // Starting vertex for the Eulerian path
+
+            for (int v = 0; v < vertices; v++) {
+                if (adjacencyList[v].size() % 2 != 0) {
+                    startVertex = v;
+                    break;
+                }
+            }
+
+            std::vector<bool> visited(vertices, false);
+
+            std::cout << "Eulerian Path: ";
+            DFS(startVertex, visited);
+            std::cout << std::endl;
+        } else {
+            std::cout << "No Eulerian Path exists in this graph." << std::endl;
+        }
+    }
+};
+
+int main() {
+    // Create a sample undirected graph
+    Graph g(5);
+    g.addEdge(0, 1);
+    g.addEdge(0, 2);
+    g.addEdge(1, 2);
+    g.addEdge(2, 3);
+    g.addEdge(3, 4);
+
+    g.findEulerianPath();
+
+    return 0;
+}
