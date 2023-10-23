@@ -1,0 +1,54 @@
+#include <iostream>
+
+// Define a structure for a tree node
+struct TreeNode {
+    int data;
+    TreeNode* left;
+    TreeNode* right;
+
+    TreeNode(int value) : data(value), left(nullptr), right(nullptr) {}
+};
+
+// Function to find the sum of nodes with only left children
+int sumLeftLeaves(TreeNode* root) {
+    if (root == nullptr) {
+        return 0;
+    }
+
+    int sum = 0;
+
+    if (root->left != nullptr && root->right == nullptr) {
+        // If the node has a left child but no right child, add its value to the sum
+        sum += root->data;
+    }
+
+    // Recursively check left and right subtrees
+    sum += sumLeftLeaves(root->left);
+    sum += sumLeftLeaves(root->right);
+
+    return sum;
+}
+
+int main() {
+    // Create a sample binary tree
+    TreeNode* root = new TreeNode(10);
+    root->left = new TreeNode(5);
+    root->right = new TreeNode(15);
+    root->left->left = new TreeNode(3);
+    root->left->right = new TreeNode(7);
+    root->right->right = new TreeNode(18);
+
+    int result = sumLeftLeaves(root);
+
+    std::cout << "Sum of nodes with only left children: " << result << std::endl;
+
+    // Clean up memory (you should have a proper memory deallocation mechanism)
+    delete root->left->left;
+    delete root->left->right;
+    delete root->left;
+    delete root->right->right;
+    delete root->right;
+    delete root;
+
+    return 0;
+}
