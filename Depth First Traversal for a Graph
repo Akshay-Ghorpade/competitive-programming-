@@ -1,0 +1,50 @@
+#include <iostream>
+#include <vector>
+
+// Define a class for the graph
+class Graph {
+    int vertices;
+    std::vector<std::vector<int>> adjacencyList;
+
+public:
+    Graph(int V) : vertices(V) {
+        adjacencyList.resize(V);
+    }
+
+    void addEdge(int u, int v) {
+        adjacencyList[u].push_back(v);
+    }
+
+    void DFSUtil(int vertex, std::vector<bool>& visited) {
+        visited[vertex] = true;
+        std::cout << vertex << " ";
+
+        for (int neighbor : adjacencyList[vertex]) {
+            if (!visited[neighbor]) {
+                DFSUtil(neighbor, visited);
+            }
+        }
+    }
+
+    void DFS(int startVertex) {
+        std::vector<bool> visited(vertices, false);
+
+        DFSUtil(startVertex, visited);
+    }
+};
+
+int main() {
+    // Create a sample graph
+    Graph g(7);
+    g.addEdge(0, 1);
+    g.addEdge(0, 2);
+    g.addEdge(1, 3);
+    g.addEdge(1, 4);
+    g.addEdge(2, 5);
+    g.addEdge(2, 6);
+
+    std::cout << "Depth-First Traversal starting from vertex 0: ";
+    g.DFS(0);
+
+    return 0;
+}
