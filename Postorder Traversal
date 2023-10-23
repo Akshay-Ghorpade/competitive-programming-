@@ -1,0 +1,48 @@
+#include <iostream>
+
+// Define a structure for a tree node
+struct TreeNode {
+    int data;
+    TreeNode* left;
+    TreeNode* right;
+
+    TreeNode(int value) : data(value), left(nullptr), right(nullptr) {}
+};
+
+// Function to perform post-order traversal of the tree
+void postOrderTraversal(TreeNode* root) {
+    if (root == nullptr) {
+        return;
+    }
+
+    // Traverse the left subtree
+    postOrderTraversal(root->left);
+
+    // Traverse the right subtree
+    postOrderTraversal(root->right);
+
+    // Visit the current node
+    std::cout << root->data << " ";
+}
+
+int main() {
+    // Create a sample binary tree
+    TreeNode* root = new TreeNode(1);
+    root->left = new TreeNode(2);
+    root->right = new TreeNode(3);
+    root->left->left = new TreeNode(4);
+    root->left->right = new TreeNode(5);
+
+    std::cout << "Post-order traversal of the tree: ";
+    postOrderTraversal(root);
+    std::cout << std::endl;
+
+    // Clean up memory (you should have a proper memory deallocation mechanism)
+    delete root->left->left;
+    delete root->left->right;
+    delete root->left;
+    delete root->right;
+    delete root;
+
+    return 0;
+}
