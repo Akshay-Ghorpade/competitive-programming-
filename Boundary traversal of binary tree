@@ -1,0 +1,89 @@
+#include <iostream>
+
+// Define a structure for a tree node
+struct TreeNode {
+    int data;
+    TreeNode* left;
+    TreeNode* right;
+
+    TreeNode(int value) : data(value), left(nullptr), right(nullptr) {}
+};
+
+// Function to perform the left boundary traversal
+void leftBoundaryTraversal(TreeNode* root) {
+    if (root == nullptr)
+        return;
+    
+    if (root->left) {
+        std::cout << root->data << " ";
+        leftBoundaryTraversal(root->left);
+    } else if (root->right) {
+        std::cout << root->data << " ";
+        leftBoundaryTraversal(root->right);
+    }
+}
+
+// Function to perform the right boundary traversal
+void rightBoundaryTraversal(TreeNode* root) {
+    if (root == nullptr)
+        return;
+    
+    if (root->right) {
+        rightBoundaryTraversal(root->right);
+        std::cout << root->data << " ";
+    } else if (root->left) {
+        rightBoundaryTraversal(root->left);
+        std::cout << root->data << " ";
+    }
+}
+
+// Function to perform leaf node traversal
+void leafNodeTraversal(TreeNode* root) {
+    if (root == nullptr)
+        return;
+    
+    if (!root->left && !root->right)
+        std::cout << root->data << " ";
+    
+    leafNodeTraversal(root->left);
+    leafNodeTraversal(root->right);
+}
+
+// Function to perform boundary traversal of the binary tree
+void boundaryTraversal(TreeNode* root) {
+    if (root == nullptr)
+        return;
+    
+    std::cout << root->data << " ";
+
+    leftBoundaryTraversal(root->left);
+    leafNodeTraversal(root->left);
+    leafNodeTraversal(root->right);
+    rightBoundaryTraversal(root->right);
+}
+
+int main() {
+    // Create a sample binary tree
+    TreeNode* root = new TreeNode(1);
+    root->left = new TreeNode(2);
+    root->right = new TreeNode(3);
+    root->left->left = new TreeNode(4);
+    root->left->right = new TreeNode(5);
+    root->right->left = new TreeNode(6);
+    root->right->right = new TreeNode(7);
+
+    std::cout << "Boundary traversal of the tree: ";
+    boundaryTraversal(root);
+    std::cout << std::endl;
+
+    // Clean up memory (you should have a proper memory deallocation mechanism)
+    delete root->left->left;
+    delete root->left->right;
+    delete root->right->left;
+    delete root->right->right;
+    delete root->left;
+    delete root->right;
+    delete root;
+
+    return 0;
+}
