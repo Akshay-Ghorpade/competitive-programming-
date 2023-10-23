@@ -1,0 +1,64 @@
+#include <iostream>
+
+// Define a structure for a tree node
+struct TreeNode {
+    int data;
+    TreeNode* left;
+    TreeNode* right;
+
+    TreeNode(int value) : data(value), left(nullptr), right(nullptr) {}
+};
+
+// Function to perform in-order traversal to find the nth node
+TreeNode* findNthInOrder(TreeNode* root, int& n) {
+    if (root == nullptr) {
+        return nullptr;
+    }
+
+    // Traverse the left subtree
+    TreeNode* leftResult = findNthInOrder(root->left, n);
+
+    // If the nth node is found in the left subtree, return it
+    if (leftResult != nullptr) {
+        return leftResult;
+    }
+
+    // Increment the count of visited nodes
+    n--;
+
+    // If the count is zero, this is the nth node
+    if (n == 0) {
+        return root;
+    }
+
+    // Otherwise, search in the right subtree
+    return findNthInOrder(root->right, n);
+}
+
+int main() {
+    // Create a sample binary tree
+    TreeNode* root = new TreeNode(1);
+    root->left = new TreeNode(2);
+    root->right = new TreeNode(3);
+    root->left->left = new TreeNode(4);
+    root->left->right = new TreeNode(5);
+
+    int n = 3; // Find the 3rd node in in-order traversal
+
+    TreeNode* nthNode = findNthInOrder(root, n);
+
+    if (nthNode != nullptr) {
+        std::cout << "The " << n << "-th node in in-order traversal is: " << nthNode->data << std::endl;
+    } else {
+        std::cout << "The tree does not have " << n << " nodes." << std::endl;
+    }
+
+    // Clean up memory (you should have a proper memory deallocation mechanism)
+    delete root->left->left;
+    delete root->left->right;
+    delete root->left;
+    delete root->right;
+    delete root;
+
+    return 0;
+}
