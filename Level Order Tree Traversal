@@ -1,0 +1,57 @@
+#include <iostream>
+#include <queue>
+
+// Define a structure for a tree node
+struct TreeNode {
+    int data;
+    TreeNode* left;
+    TreeNode* right;
+
+    TreeNode(int value) : data(value), left(nullptr), right(nullptr) {}
+};
+
+// Function to perform level-order traversal of the tree
+void levelOrderTraversal(TreeNode* root) {
+    if (root == nullptr) {
+        return;
+    }
+
+    std::queue<TreeNode*> nodeQueue;
+    nodeQueue.push(root);
+
+    while (!nodeQueue.empty()) {
+        TreeNode* currentNode = nodeQueue.front();
+        std::cout << currentNode->data << " ";
+        nodeQueue.pop();
+
+        if (currentNode->left) {
+            nodeQueue.push(currentNode->left);
+        }
+
+        if (currentNode->right) {
+            nodeQueue.push(currentNode->right);
+        }
+    }
+}
+
+int main() {
+    // Create a sample binary tree
+    TreeNode* root = new TreeNode(1);
+    root->left = new TreeNode(2);
+    root->right = new TreeNode(3);
+    root->left->left = new TreeNode(4);
+    root->left->right = new TreeNode(5);
+
+    std::cout << "Level-order traversal of the tree: ";
+    levelOrderTraversal(root);
+    std::cout << std::endl;
+
+    // Clean up memory (you should have a proper memory deallocation mechanism)
+    delete root->left->left;
+    delete root->left->right;
+    delete root->left;
+    delete root->right;
+    delete root;
+
+    return 0;
+}
