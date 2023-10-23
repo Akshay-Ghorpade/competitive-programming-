@@ -1,0 +1,64 @@
+#include <iostream>
+#include <vector>
+
+class Graph {
+    int vertices;
+    std::vector<std::vector<int>> adjacencyList;
+
+public:
+    Graph(int V) : vertices(V) {
+        adjacencyList.resize(V);
+    }
+
+    void addEdge(int u, int v) {
+        adjacencyList[u].push_back(v);
+        adjacencyList[v].push_back(u); // Undirected graph
+    }
+
+    bool isEulerianCircuit() {
+        for (int v = 0; v < vertices; v++) {
+            if (adjacencyList[v].size() % 2 != 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    void DFS(int v, std::vector<bool>& visited) {
+        visited[v] = true;
+        std::cout << v << " ";
+
+        for (int neighbor : adjacencyList[v]) {
+            if (!visited[neighbor]) {
+                DFS(neighbor, visited);
+            }
+        }
+    }
+
+    void findEulerianCircuit() {
+        if (isEulerianCircuit()) {
+            std::vector<bool> visited(vertices, false);
+
+            std::cout << "Eulerian Circuit: ";
+            DFS(0, visited); // Start the circuit from any vertex (here, 0)
+            std::cout << std::endl;
+        } else {
+            std::cout << "No Eulerian Circuit exists in this graph." << std::endl;
+        }
+    }
+};
+
+int main() {
+    // Create a sample undirected graph with an Eulerian circuit
+    Graph g(5);
+    g.addEdge(0, 1);
+    g.addEdge(0, 2);
+    g.addEdge(1, 2);
+    g.addEdge(2, 3);
+    g.addEdge(3, 4);
+    g.addEdge(4, 0);
+
+    g.findEulerianCircuit();
+
+    return 0;
+}
